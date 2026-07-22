@@ -1,0 +1,97 @@
+{
+  "_comment": "This is a SAMPLE config with fictional companies, names and regions. In production, the client's real config file lives only on their machine and is never committed to version control.",
+
+  "addition_deletion": {
+    "addition_output_columns": ["Emp ID", "First Name", "Last Name", "Designation", "Dept#", "CTC", "City", "Date of Birth", "Gender", "DOJ", "Email Address", "Company Name"],
+    "addition_mapping": {
+      "Emp ID": "Person Number",
+      "First Name": "First Name",
+      "Last Name": "Last Name",
+      "Designation": "Job Name",
+      "Dept#": "Cost Center ID",
+      "CTC": "Annualized Salary",
+      "City": "Location Name",
+      "Gender": "Person Gender",
+      "DOJ": "Hire Date",
+      "Email Address": "Work Email",
+      "Company Name": "Business Unit Name"
+    },
+    "dob_source": {
+      "source_file": "personal_info",
+      "join_key": "Person Number",
+      "column": "Person Date of Birth",
+      "target_column": "Date of Birth"
+    },
+    "company_mismatch_check": {
+      "column_a": "Business Unit Name",
+      "column_b": "Legal Employer Name",
+      "flag_column": "Company Name Mismatch"
+    },
+    "deletion_output_columns": ["Emp Id", "Employee Name", "Last working date", "Job Name", "Comments", "Company Name"],
+    "deletion_mapping": {
+      "Emp Id": "Person Number",
+      "Employee Name": "Person Name",
+      "Last working date": "Last day in service",
+      "Job Name": "Job Name"
+    },
+    "deletion_company_lookup": {
+      "source_file": "prior_month_functional_info",
+      "join_key": "Person Number",
+      "column": "Business Unit Name",
+      "target_column": "Company Name"
+    }
+  },
+
+  "monthly_accrual": {
+    "master_column_order": [
+      "Person Number", "Display Name", "Grade Code", "Incentive Prog", "Incentive Target %",
+      "Country", "Level 01 Organization Name", "Dept ID", "Department Name", "Department Set Name",
+      "Annualized Salary", "Currency Code", "Regular/Temporary", "Last Start", "Region", "Distributee"
+    ],
+    "comp_roster_rename": {
+      "Person Number": "Person Number",
+      "Display Name": "Display Name",
+      "Grade Code": "Grade Code",
+      "Incentive Prog": "Incentive Prog",
+      "Incentive Target %": "Incentive Target %",
+      "Legislation": "Country",
+      "Level 01 Organization Name": "Level 01 Organization Name",
+      "Department Name": "Department Name",
+      "Department Set Name": "Department Set Name",
+      "Annualized Salary": "Annualized Salary",
+      "Salary Currency": "Currency Code",
+      "Regular/Temporary": "Regular/Temporary",
+      "Seniority Date": "Last Start"
+    },
+    "dept_id_split": {
+      "source_column": "Department Name",
+      "delimiter": " ",
+      "id_target_column": "Dept ID",
+      "name_target_column": "Department Name",
+      "example": "101 sales of mumbai -> Dept ID '101', Department Name 'sales of mumbai'"
+    },
+    "distribution_list_join_key": "Country",
+    "hc_pivot": {
+      "filter_field": "Incentive Prog",
+      "row_fields": ["Distributee", "Country"],
+      "value_field": "Display Name",
+      "aggregation": "count"
+    },
+    "regional_outputs": [
+      { "file_name": "All Regions (admin)", "distributees": null },
+      { "file_name": "EMEA Rollup", "distributees": ["A. Kowalski", "M. Costa", "T. Byrne"] },
+      { "file_name": "Germany", "distributees": ["A. Kowalski"] },
+      { "file_name": "Netherlands", "distributees": ["T. Byrne"] },
+      { "file_name": "Rest of EMEA", "distributees": ["M. Costa"] },
+      { "file_name": "USA", "distributees": ["J. Alvarez"] },
+      {
+        "file_name": "APAC + NAMER (ex-US)",
+        "distributees": ["R. Singh"],
+        "sub_split": {
+          "field": "Incentive Prog",
+          "values": ["SALES", "STI", "COMMISSION"]
+        }
+      }
+    ]
+  }
+}
