@@ -1,4 +1,4 @@
-# HR Reporting Automation (offline, config-driven)
+# Report Automation (offline, config-driven)
 
 A local desktop tool that turns a set of raw HR system exports into two
 standardized reporting deliverables — with zero internet access and zero
@@ -69,7 +69,7 @@ pip install pyinstaller
 pyinstaller build_exe.spec
 ```
 
-The result is a folder (`dist/HR_Reporting_Automation/`) with a single
+The result is a folder (`dist/Report_Automation/`) with a single
 executable the client double-clicks — it opens the browser to the local
 app automatically. No install step, no internet connection, ever.
 

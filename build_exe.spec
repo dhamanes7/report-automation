@@ -39,7 +39,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name="HR_Reporting_Automation",
+    name="Report_Automation",
     debug=False,
     strip=False,
     upx=True,
@@ -53,5 +53,5 @@ coll = COLLECT(
     a.datas,
     strip=False,
     upx=True,
-    name="HR_Reporting_Automation",
+    name="Report_Automation",
 )

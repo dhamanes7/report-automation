@@ -6,7 +6,7 @@ from engine.config_loader import load_config
 from engine.addition_deletion import build_addition_deletion_workbook
 from engine.monthly_accrual import build_master, build_hc_pivot, build_regional_outputs
 
-st.set_page_config(page_title="HR Reporting Automation", layout="wide")
+st.set_page_config(page_title="Report Automation", layout="wide")
 
 CFG = load_config("sample_config.json")
 
@@ -24,7 +24,7 @@ def df_dict_to_excel_bytes(sheets: dict) -> bytes:
     return buf.getvalue()
 
 
-st.title("HR reporting automation — demo")
+st.title("Report automation — demo")
 st.caption("Runs fully offline. All data shown is synthetic sample data — no real client information.")
 
 task = st.radio("Choose a task", ["Addition & Deletion File", "Monthly Accrual File"], horizontal=True)
