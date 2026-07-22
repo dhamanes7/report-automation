@@ -16,6 +16,10 @@ cost to run.
 Joins a hiring export, a personal-info export (DOB only), and a
 terminations export into a single workbook with two tabs, renaming and
 remapping columns along the way, plus a QA flag for company-name mismatches.
+A shared From/To date range (defaults to the last 15 days) filters the
+hiring export by Hire Date and the terminations export by Last day in
+service before anything else runs, so the DOB join and the Company Name
+backfill only ever see the in-range rows.
 
 ![Addition & Deletion column lineage](docs/addition_deletion_lineage.svg)
 

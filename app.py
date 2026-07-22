@@ -1,4 +1,6 @@
 import io
+from datetime import date, timedelta
+
 import pandas as pd
 import streamlit as st
 
@@ -33,6 +35,13 @@ st.divider()
 
 if task == "Addition & Deletion File":
     st.subheader("Task 1: Addition & Deletion File")
+
+    fc1, fc2 = st.columns(2)
+    with fc1:
+        date_from = st.date_input("From", value=date.today() - timedelta(days=15))
+    with fc2:
+        date_to = st.date_input("To", value=date.today())
+
     c1, c2 = st.columns(2)
     with c1:
         functional_info_f = st.file_uploader("Functional Information", type=["xlsx"])
@@ -51,13 +60,21 @@ if task == "Addition & Deletion File":
                 read_upload(terminations_f),
                 read_upload(prior_month_f),
                 CFG,
+                date_from=date_from,
+                date_to=date_to,
             )
             st.success("Done.")
             tab1, tab2 = st.tabs(["Addition", "Deletion"])
             with tab1:
-                st.dataframe(result["Addition"], use_container_width=True)
+                if result["Addition"].empty:
+                    st.info("No records in this date range.")
+                else:
+                    st.dataframe(result["Addition"], use_container_width=True)
             with tab2:
-                st.dataframe(result["Deletion"], use_container_width=True)
+                if result["Deletion"].empty:
+                    st.info("No records in this date range.")
+                else:
+                    st.dataframe(result["Deletion"], use_container_width=True)
 
             st.download_button(
                 "Download Addition & Deletion File.xlsx",
@@ -104,6 +121,7 @@ else:
             for tab, (sheet_name, df) in zip(tabs, sheets.items()):
                 with tab:
                     st.dataframe(df, use_container_width=True)
+
 
             st.download_button(
                 f"Download {picked}.xlsx",
