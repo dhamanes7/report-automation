@@ -1,0 +1,57 @@
+name: Build Windows exe
+
+# PyInstaller can't cross-compile — a real Windows .exe can only come from a
+# build run on Windows. This workflow does that build on GitHub's own
+# windows-latest runner and publishes the result to a GitHub Release, so
+# there's always one stable link to hand to a client with no GitHub login
+# required (unlike Actions artifacts, which do require being logged in).
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - "build_exe.spec"
+      - "run_app.py"
+      - "app.py"
+      - "engine/**"
+      - "assets/**"
+      - "requirements.txt"
+      - "sample_config.json"
+      - "sample_data/**"
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -r requirements.txt
+
+      - name: Build normal (windowed) exe
+        run: pyinstaller build_exe.spec --noconfirm
+
+      - name: Build debug (console) exe
+        run: pyinstaller build_exe.spec --noconfirm
+        env:
+          DEBUG_BUILD: "1"
+
+      - name: Publish rolling "latest-build" release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest-build
+          name: Latest Windows build
+          prerelease: true
+          body: |
+            Automatically built from commit ${{ github.sha }}.
+
+            - `Report_Automation.exe` — hand this one to the client.
+            - `Report_Automation_debug.exe` — same app with a visible console
+              window, for diagnosing a silent failure. Not for normal use.
+          files: |
+            dist/Report_Automation.exe
+            dist/Report_Automation_debug.exe
