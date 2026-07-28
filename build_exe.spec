@@ -33,7 +33,6 @@ a = Analysis(
         ("app.py", "."),
         ("sample_config.json", "."),
         ("engine", "engine"),
-        ("sample_data", "sample_data"),
     ],
     hiddenimports=streamlit_hidden + ["engine", "engine.config_loader",
                                        "engine.addition_deletion", "engine.monthly_accrual"],
