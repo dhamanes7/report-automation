@@ -1,11 +1,22 @@
 # Build with:  pyinstaller build_exe.spec
-# Produces a single-folder (or --onefile, see below) offline executable.
-# The client double-clicks the result — no Python, no pip, no internet, ever.
+#   normal windowed build (for the client):   pyinstaller build_exe.spec
+#   debug build with a visible console:       DEBUG_BUILD=1 pyinstaller build_exe.spec
+#
+# Produces a single portable .exe (onefile) — offline, no Python, no pip,
+# nothing else to extract or keep alongside it. The client just double-clicks it.
+#
+# The debug build is for diagnosing a silent failure on the client's machine:
+# it opens a console window so you can see the actual traceback instead of the
+# window just closing. Use the normal build for anything you hand to the client.
+
+import os
 
 import streamlit
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules, copy_metadata
 
 block_cipher = None
+
+DEBUG_BUILD = os.environ.get("DEBUG_BUILD") == "1"
 
 streamlit_datas = collect_data_files("streamlit")
 streamlit_hidden = collect_submodules("streamlit")
@@ -37,21 +48,17 @@ pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 exe = EXE(
     pyz,
     a.scripts,
-    [],
-    exclude_binaries=True,
-    name="Report_Automation",
-    debug=False,
-    strip=False,
-    upx=True,
-    console=False,
-)
-
-coll = COLLECT(
-    exe,
     a.binaries,
     a.zipfiles,
     a.datas,
+    [],
+    name="Report_Automation_debug" if DEBUG_BUILD else "Report_Automation",
+    debug=False,
+    bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    name="Report_Automation",
+    upx_exclude=[],
+    runtime_tmpdir=None,
+    console=DEBUG_BUILD,
+    icon="assets/app_icon.ico",
 )

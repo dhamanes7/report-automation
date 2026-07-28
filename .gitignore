@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 build/
 dist/
+error_log.txt
 *.spec.bak
 .venv/
 venv/
