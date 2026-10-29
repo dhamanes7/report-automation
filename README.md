@@ -1,5 +1,11 @@
 # Report Automation (offline, config-driven)
 
+**Impact:** Used by an HR team in production. Cut recurring report preparation from about 6 hours to about 30 minutes.
+
+**Skills shown:** Python, pandas, ETL, data validation and QA, config-driven design, Streamlit
+
+
+
 A local desktop tool that turns a set of raw HR system exports into two
 standardized reporting deliverables — with zero internet access and zero
 cost to run.
